@@ -1,0 +1,272 @@
+//1. Start the test by opening a browser to www.labcorp.com
+
+public class LabCorpTask {
+
+	WebDriver driver;
+	Actions action;
+
+	// Navigate to labcorp
+
+	@Before
+	public void beforeMethod() {
+		WebDriverManager.chromedriver().setup();
+		driver = new ChromeDriver();
+		driver.get("https://www.labcorp.com/");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+		// accept cookies on homepage
+		driver.findElement(By.id("onetrust-accept-btn-handler")).click();
+
+	}
+
+	@After
+	public void afterMethod() {
+		
+//		driver.close();
+	}
+
+	// 2. Find and click Careers link
+
+	@Test
+	public void findCareer() throws InterruptedException {
+
+		action = new Actions(driver);
+
+		WebElement CareersLink = driver
+				.findElement(By.xpath("//*[@id=\"topofpage\"]/div/footer/div[1]/div/div[1]/div/nav[1]/ul/li[3]/a"));
+
+		Thread.sleep(3000);
+
+		CareersLink.click();
+		
+		
+		
+		//Switch window handle for new page
+		
+		
+//		System.out.println("Title of the page before Switching WindowHandle -- >" + driver.getTitle());
+
+		Set<String> ids = driver.getWindowHandles();
+		Iterator<String> itr = ids.iterator();
+
+		String parentId = itr.next();
+		String childId = itr.next();
+
+		driver.switchTo().window(childId);
+
+		
+		
+		// accept button for cookies
+		
+		Thread.sleep(3000);
+		
+		driver.findElement(By.xpath("//button[text()='Accept']")).click();
+	
+		
+
+//		List<WebElement> iframes = driver.findElements(By.xpath("//iframe"));
+//
+//		Boolean myButtonExist = false;
+//		
+//		for (int i = 0; i < iframes.size(); i++) {
+//
+//			Thread.sleep(3000);
+//
+//			driver.switchTo().frame(iframes.get(i));
+//
+//			List<WebElement> listOfButtons = driver.findElements(By.xpath("//button"));
+//
+//			for (int j = 0; j < listOfButtons.size(); j++) {
+//
+//				if (listOfButtons.get(j).getText().toLowerCase().contains("accept")) {
+//					myButtonExist = true;
+//					listOfButtons.get(j).click();
+//					driver.switchTo().defaultContent();
+//				}
+//			}
+//
+//			driver.switchTo().defaultContent();
+//
+//		}
+		//System.out.println("finally here --- " + myButtonExist );
+		
+
+//		Thread.sleep(3000);
+//
+//		List<WebElement> iframes = driver.findElements(By.xpath("//iframe"));
+//
+//		for (int i = 0; i < iframes.size(); i++) {
+//
+//			Thread.sleep(3000);
+//
+//			driver.switchTo().frame(iframes.get(i));
+//
+//			
+//
+//			if (driver.findElement(By.xpath("//button[text()='Accept']")).isDisplayed()) {
+//				driver.findElement(By.xpath("//button[text()='Accept']")).click();
+//				driver.switchTo().defaultContent();
+//			}
+//
+//		}
+
+//		driver.switchTo().frame(element)
+//		element = driver.findElement(By.xpath("(//path[@elementargument=‘Subs’])[1]"));
+//		element.click()
+//		
+
+		
+//		System.out.println(driver.findElement(By.tagName("iframe")).getText());
+//
+//		WebElement popupButton = driver.findElement(By.id("gdpr-button"));
+//
+//		// popupButton.click();
+//
+//		action.doubleClick(popupButton);
+		
+		
+		
+		
+
+		// 3. Search for any position (that is currently active on the site) example “QA Test Automation Developer”
+
+
+		String searchPosition = "QA Test Automation Developer";
+		WebElement searchBox = driver.findElement(By.xpath("//input[contains(@id,'search-keyword')]"));
+		searchBox.sendKeys(searchPosition, Keys.ENTER);
+
+		
+		
+		
+
+		// 4. Select and browse to the position
+
+			WebElement position = driver.findElement(By.xpath("//*[@id=\"search-results-list\"]/ul/li[1]/a"));
+			
+			position.click();
+			
+			
+
+		// 5. Add assertions to confirm
+		
+		// JOB TITLE
+			
+			WebElement jobTitle = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]/section[2]/h1"));
+			
+			String ExpectedJobTitle = "Software Quality Assurance (QA) Engineer";
+			
+			Assert.assertEquals(ExpectedJobTitle, jobTitle.getText());
+			
+			System.out.println("Job Title is expected");
+			
+			
+		// JOB LOCATION
+
+			WebElement jobLocation = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]/section[2]/div[1]/span[1]"));
+			
+			String ExpectedJobLocation = "Location: Bethesda, Maryland";
+			
+			Assert.assertTrue(jobLocation.getText().contains("Location") && jobLocation.getText().contains("Bethesda, Maryland"));
+			
+			System.out.println("Job Location is expected");
+			
+			
+		// JOB ID
+			
+			WebElement jobId = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]/section[2]/div[1]/span[2]"));
+			
+			String ExpectedJobId = "Job ID: 21-89616";
+			
+			Assert.assertTrue(jobId.getText().contains("Job ID") && jobId.getText().contains("21-89616"));
+			
+			System.out.println("Job ID is expected");
+			
+			
+			
+		// Any 3 other assertions of your choice (could be text in the requirements / introduction)
+			
+			
+			
+		//QUALIFICATIONS - SQL
+			
+			WebElement sql = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]/section[2]/div[2]/div[2]/span/div[3]/ul[1]/li[1]"));
+			
+			String Expectedqualification = "Strong ability to read and develop SQL query statements";
+			
+			Assert.assertEquals(Expectedqualification, sql.getText());
+			
+			System.out.println("SQL Job Qualification is expected");
+			
+			
+			//REQUIREMENTS
+			
+			WebElement degree = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]/section[2]/div[2]/div[2]/span/div[1]"));
+			
+			String ExpectedRequirement = "License/Certification/Education: B.S. Degree in Computer Science w/2-4 years of experience in related field.";
+			
+			Assert.assertEquals(ExpectedRequirement, degree.getText());
+			
+			System.out.println("Job Degree Requirement is expected");
+			
+			
+			//RESPONSIBILITIES
+			
+			WebElement responsibility = driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]/section[2]/div[2]/div[1]/ul/li[1]"));
+			
+			String ExpectedResp = "Design, develop and execute performance test scripts, including load test scripts, in Visual Studio and open source tools";
+			
+			Assert.assertEquals(ExpectedResp, responsibility.getText());
+			
+			System.out.println("Job Responsibilites Requirement is expected");
+			
+			
+			
+			//6. Click Apply Now
+			
+			
+			
+			driver.findElement(By.xpath("//*[@id=\"content\"]/div[3]/section[2]/a")).click();
+
+			
+			//Switch handle to new page
+			
+
+			Set<String> ids1 = driver.getWindowHandles();
+			Iterator<String> itr1 = ids1.iterator();
+
+			String parentId1 = itr1.next();
+			String childId1 = itr1.next();
+
+			driver.switchTo().window(childId1);
+			
+			
+			
+			Thread.sleep(10000);
+			
+			//close popup
+			
+			
+			WebElement popupButton = driver.findElement(By.xpath("//*[@id=\"srccar\"]/adprm-sign-in-popover/div/div[3]/div[2]/div/div[1]/button"));
+			popupButton.click();
+			
+			
+			//confirm Job Title, Job Location, Job ID and another text of choice to match
+			//the previous page in the proceeding page.
+			
+			
+//			WebElement newjobId = driver.findElement(By.xpath("//*[@id=\"ae-main-content\"]/div/div/div[2]/div/div/div[1]/span[2]"));
+//			
+//			Assert.assertEquals(newjobId, jobId.getText());
+//			
+//			System.out.println("Job ID is expected");
+			
+			
+			
+			//7. Click to Return to Job Search
+			
+			WebElement Return = driver.findElement(By.xpath("//*[@id=\"ae-main-content\"]/div/div/div[1]/button"));
+
+			Return.click();
+	
+}
